@@ -1,0 +1,13 @@
+# latex stuff
+**.aux
+**.log
+**.pdf
+
+# image stuff
+**.pgf
+**.svg
+**.png
+!convincing.png
+
+# vim stuff
+**.swp

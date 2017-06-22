@@ -1,0 +1,39 @@
+\documentclass[a4paper, 11pt]{article}
+
+% PACKAGES
+\usepackage[english]{babel}
+\usepackage{pgfplots}
+
+%DOCUMENT
+\begin{document}
+
+% This command shows why pgfplots is a good option: When changing the font of
+% your latex document the fonts inside your plot will be changed accordingly.
+% For this example to work the 'Palatino' font must be installed
+\renewcommand*\rmdefault{ppl}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{awsome_plot.png}
+
+    \caption{This plot shows the png image.}
+    \label{fig:png}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{awsome_plot.pdf}
+
+    \caption{This plot shows the pdf image.}
+    \label{fig:pdf}
+\end{figure}
+
+\begin{figure}
+    \hspace{-2.75cm}
+    \input{awsome_plot.pgf}
+
+    \caption{This plot shows the pgf plot.}
+    \label{fig:pgf}
+\end{figure}
+
+\end{document}
