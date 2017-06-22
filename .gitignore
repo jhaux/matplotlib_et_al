@@ -11,3 +11,6 @@
 
 # vim stuff
 **.swp
+
+# ipython stuff
+**/.ipynb_checkpoints/**
