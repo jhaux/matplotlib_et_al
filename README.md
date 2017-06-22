@@ -7,9 +7,13 @@ To woke with them clone this repo and make sure you have `jupyter notebook`
 installed. 
 If this is not the case just follow the instructions
 on [jupyter notebook repo](https://github.com/jupyter/notebook) or run
-        sudo pip install notebook
+'''bash
+sudo pip install notebook
+'''
 
 Then to start the notebook navigate inside the repo and run
-        jupyter notebook
+'''bash
+jupyter notebook
+'''
 A browser will open where the notebooks should be visible. Clicking them will
 open them.
