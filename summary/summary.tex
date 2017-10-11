@@ -1,0 +1,374 @@
+\documentclass[a4paper, 11pt, twocolumn]{article}
+
+% PACKAGES
+
+\usepackage{float}
+\usepackage[english]{babel}
+\usepackage{pgfplots}  % Nice plots
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{minted}  % Code highlighting
+\usepackage{xspace}  % Add trailing space if neccesary
+
+% COMMANDS
+
+% Show a code sample with the resulting plot side by side
+% Works well for code that has a max of 42 characters per line
+\newcommand{\plotsample}[6][12cm]{
+\begin{figure*}[h]
+    
+    \vspace{#2}
+    \hspace{-1cm}
+    \begin{minipage}[c][#1][t]{#3\textwidth} 
+    \inputminted{python}{#4.py}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}[c][#1][t]{0.6\textwidth}
+    \IfFileExists{#4.pgf}{
+        \input{#4.pgf}
+    }{
+        \includegraphics[width=\linewidth]{#4.png}
+    }
+    \end{minipage}
+
+\caption{#5}
+\label{smpl:#6}
+\end{figure*}
+}
+
+\newcommand{\mpl}{\texttt{matplotlib}\xspace}
+\newcommand{\pl}[1]{\mbox{\texttt{#1}\xspace}}
+\newcommand{\latex}{\LaTeX\xspace}
+
+\title{matplotlib et al.}
+\author{Johannes Haux}
+\date{\today}
+
+%DOCUMENT
+\begin{document}
+
+\maketitle
+
+% \plotsample[8cm]{-1cm}{0.5}{axis_labels}{Adding labels to the axis is done with
+%                                         two lines of code.}{lb}
+
+When it comes to presenting data, \mpl is a very interesting
+tool, that combines a lot of positive features:
+It is 
+free,
+well documented with a lot of examples and
+customizable to a very fine grained level.
+
+This document accompanies a talk given in the seminar "Advanced Tools" during
+the summer semester 2017. Here I will take a look at some basic concepts of
+\mpl and then demonstrate some features using an example plot.
+
+
+\section{A first Plot}
+
+\begin{figure}[h!]
+\centering
+\input{axis_labels.pgf}
+\caption{Plot generated with the code shown in listing \ref{l:al}}
+\label{fig:al}
+\end{figure}
+
+\begin{listing}[h!]
+\inputminted{python}{axis_labels.py}
+\caption{Code for figure \ref{fig:al}.}
+\label{l:al}
+\end{listing}
+
+To show how quickly one can make plots with the \mpl an example
+is given in \mbox{figure \ref{fig:al}}.
+
+Given an artificially created dataset \pl{data} we want to take a look at its
+histogram.
+To do this only one line of code is used to generate the plot: 
+\pl{plt.hist(data)}
+Using the commands \pl{plt.[x,y]label} one can quickly add labels to the
+axis to make the plot easier to interpret.
+
+Finally the plot is saved to using the \pl{plt.savefig(...)} command and shown
+to the user with the \pl{plt.show()} command.
+
+To ensure that the axis labels are visible when the plot is saved the method
+\pl{f.tight\_layout()} is called on the figure object containing the plot.
+
+Thus it is very easy to get a visual feedback of how your data looks like with
+only a small number of lines of code! But of course when thinking about publishing, one wants to have more intricate customizability. This is absolutely 
+possible using the \mpl, as can be seen for example in figure \ref{fig:gs}.
+To understand what is happening there, we will first take a look at what is 
+inside the plots generated with the \mpl.
+
+
+\section{Components of a Plot}
+
+A \mpl plot consists of 4 main components:
+\begin{description}
+\item[Figure]
+The figure manages all axes in a plot and contains information on the size of
+the plot. It can be instanciated by calling \pl{plt.figure()}. 
+The current figure can be obained by calling \pl{plt.gcf()}.
+
+\item[Axes]
+The axes is where the actual plot lives. Here the data is drawn
+as specified in the plot calls. To instanciate an axes given a figure \pl{f}
+one can use \pl{f.add\_subplot(...)}. To generate both figure and axes it
+is encouraged to use \pl{f, ax = plt.subplots(rows, cols)}.
+The current axes can be obained by calling \pl{plt.gca()}.
+
+\item[Axis]
+Each axes contains a set of axis, which manage the data range that is to be
+plotted as well as all ticks and ticklabels.
+
+\item[Artist]
+All components of a plot are drawn by artists when the plot is rendered.
+E.g. a figure is also an artist, as well as axes and axis.
+\end{description}
+
+The \mpl has a notion of a current figure and axis. This allows
+the user to make several plotting calls without explicitly specifying where
+to draw the plot. As said above, these can be accessed by calling 
+\pl{plt.gcf()} and \pl{plt.gca()} for current figure and axes respectively.
+
+
+\section{Working with \mpl}
+
+At times the many possibilities the \mpl offers can be overwhelming. There are 
+nevertheless ways to help yourself.
+
+\begin{description}
+\item[Examples]
+If one is unsure what kind of plot one wants to make or has a rough idea, what
+it should look like, the \href{https://matplotlib.org/examples/}{examples} page
+of the matplotlib documentation is very helpful.
+\item[Documentation]
+When in doubt how to use a certain object or method, the
+\mpl \href{https://matplotlib.org/contents.html}{documentation} covers it! 
+\item[StackOverflow]
+If the above two ways do not help, it might be useful to note, that there is a
+very active user community, helping each other out, e.g. on
+\href{https://stackoverflow.com/questions/tagged/matplotlib}{stackoverflow}.
+Most solutions to most problems can be found there.
+\end{description}
+
+
+
+\section{A more complex Plot}
+
+\label{sec:plt}
+
+\begin{figure*}[ht!]
+\centering
+\input{grid_spec.pgf}
+\caption{Complex plot example showing different plot types and ways to
+         structure the appearance. It is discussed in detail in section
+         \ref{sec:plt}.}
+\label{fig:gs}
+\end{figure*}
+
+In the following, whenever line numbers are referenced, these are taken from
+section \ref{sec:gs}, unless otherwise specified.
+
+In figure \ref{fig:gs} one can find the plot that is generated by the code
+found in section \ref{sec:gs}. Again artificially generated data is used.
+
+When comparing the code shown in listing \ref{l:al} and section \ref{sec:gs}
+respectively, one can first of all notice several differences in how the plots
+are created.
+
+\subsection{Coding Style}
+The code shown in figure \ref{fig:al} is written in the "pyplot" coding style,
+also called "MATLAB" coding style, as it tries to emulate the plotting commands
+used in MATLAB.
+
+This coding style can be used to quickly create simple plots, yet it can
+grow unreadbly very fast if the plot becomes more and more complex.
+
+The alternative to this coding style is the object oriented approach, which 
+uses explicit handles for figures and axes objects. It has the great advantage,
+that it make s code easier to read and allows access to more methods, that 
+would be harder to use when using pure pyplot coding.
+
+
+\subsection{Multiple Axes}
+
+The simple plot consisted only of one axes and figure, that were both
+implicitly created with the \pl{plt.hist()} call. In the second example we find
+several axes in the figure, which are created explicitly.
+
+There are several ways to draw multiple axes in one figure. When wanting to
+draw a regular grid of plots the easiest method would be
+\mint{python}|fig, AX = plt.subplots(nrows, ncols)|
+which returns the figure and a list of all axes. The arguments \pl{nrows} and 
+\pl{ncols} define the numbers of rows and columns of axes in the figure.
+
+To get more control over the way the axes are drawn one can use the
+\pl{GridSpec} object as is done in the example plot. It also defines a grid,
+but in contrast to the approach above one can also define axes that span
+several rows or columns or both, by passing slices of the object to
+\pl{figure.add\_subplot()}. This is done for example in line \ref{gsslice}.
+Additionaly one can also specify the height or width ratios of the axes using
+the \pl{height\_ratios} or \pl{width\_ratios} keyword argument. The latter can
+be seen in line \ref{gswr}. Of course the customizability does not end here,
+more information on the
+\href{https://matplotlib.org/users/gridspec.html}{GridSpec} object can be found
+in the matplotlib documentation.
+
+
+\subsection{Plot types}
+
+We can also see a new plottype in figure \ref{fig:gs}: The lineplot, generated
+with the \pl{ax.plot()} method (see line \ref{plot}).
+
+There are very many different plot types \mpl supports, a look at the
+\href{https://matplotlib.org/api/axes_api.html#plotting}{documentation} can
+give an idea of how these look like.
+
+Also note that when plotting the histogram in line \ref{hist} and below, some
+keyword arguments are passed to draw a black edge around the bars and make them
+translucent, such that the overlapping parts are all visible. Most plotting
+methods support these and similar arguments, like \pl{linestyle}, \pl{color},
+\pl{marker} or \pl{markersize}, which allow to explicitly specify the way the
+plots are drawn.
+
+Calling several plotting methods on one axis in succession without specifing the color explicitly will not result in multiple plots of the same color, but as
+can be seen in figure \ref{fig:gs}, in plots of different colors. This allows
+to easily stack plots in one axes without loosing the overview.
+
+\subsection{Legends}
+
+To know which plot corresponds to which data one can pass the \pl{label} 
+keyword to each plotting method and call the \pl{ax.legend()} method on the
+axes of interest. The draws a legend with the specified labels in a place on
+the axes that covers as little of the plot as possible. This can be seen in
+line \ref{leg}. The position of the legend can also be explicitly set by 
+passing a string (e.g. \pl{'upper left'}, \pl{'center'}) or an int (e.g.
+\pl{2}, \pl{10} respectively).
+
+Calling \pl{legend()} without argurments will only take labels from plotting
+calls on this axes into account. If one would like to make a legend inside a
+different axes than the one where the data is plotted, one has to pass a list
+of handles and a list of corresponding names to this method. The handles are
+returned by the plotting methods.
+
+Again a look at the \href{https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend}{documentation}
+can be very helpful.
+
+
+\subsection{Text and Annotation}
+
+The most glaring difference between the simple and the complex plot are, that 
+the in the latter the fonts are set in a latex like serif font. This is
+accomplished by telling the \mpl to update some default parameters stored
+in the \pl{rcParams} dictionary. To simply get use latex text, one has to set
+the \pl{'text.usetex'} parameter to True and to use serif fonts, one has to
+choose the \pl{'font.family'} accordingly. All text will now look like in a
+\latex document.
+
+But this is not all we can do: If one would like to draw a \latex formula in
+the plot this is now possible. In the example this is done in line \ref{ann}
+using the \href{https://matplotlib.org/users/annotations.html}{\pl{annotate()}}
+method, but one could also use the
+\href{https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.text}
+{\pl{text()}} method.
+
+Please note that the string containing the text is a raw string. Thus no 
+characters are escaped, which helps a lot when using expressions like
+\pl{\\frac\{\}\{\}}, that would otherwise result in escaping \pl{\\f} to a
+formfeed or pagebreak, something latex does not understand.
+
+While \pl{text} simply draws the text where we want it, \pl{annotate} also
+allows to draw an arrow between text and a point \pl{xy}, we have to specify.
+The properties of the arrow are controlled using the \pl{arrow\_props}
+dictionary. Here we chose to draw an arc with a simple arrowhead on the front,
+but many other possibilities exist.
+
+The coordinates that are specified are also interesting to look at. When
+drawing text the default behaviour of \mpl is to interpret the coordinates like
+data points. In our example this is the case for the \pl{xy} coordinates where
+the arrow points. As the text is supposed to be place in the top left corner,
+the coordinates \pl{xytext} here are chosen to be a fraction of the axes as
+specified by passing the \pl{textcoords} argument. (0, 0) corresponds to the
+bottom left corner of the axes, (1, 1) to the top right. Values outside the
+$[0, 1]^2$ are outside of the axes.
+
+To ensure that the text is not drawn over the borders of the plot we can
+specify its alignment with the \pl{va} and \pl{ha} keywords for vertical and
+horizontal alignment respectively. In our example they are set such that the 
+top right of the bounding box of the text is at the corrdinates specified for 
+the text.
+
+Another example where text is modified can be found in line \ref{lbc}.
+Sometimes it can be useful to explicitely position the labels of an axis. In
+our example the y labels of the top left and bottom axes were not aligned, so
+they were modeved using the \pl{ax.yaxis.set\_label\_coords()} method. Its
+arguments are the x and y coordinates of the label as axes fraction at which
+the text should be placed, just like above in the \pl{annotate} example.
+
+
+\subsection{Exporting}
+When we are done with tweaking the plot it is time to save it to a file, that
+can later be reused. This is simply done by calling the \pl{f.save()} method 
+on the figure object. The only thing that needs to be specified is name of the
+file with the file ending corresponding the desired format. This could for 
+example be \pl{.png}, \pl{.jpg}, \pl{.svg} or \pl{.pgf}.
+
+The latter is of special interest to \latex users, as it saves the plot as a
+tikz picture, that then can be placed inside a \latex document using the
+command \pl{\\input\{<plot>.pgf\}}
+
+The dimensions of the plot are those specified when instanciating the figure
+using the \pl{figsize} argument. Please note that the unit of these values is
+inches. 
+
+It is also important to note, that the size of text in the plots corresponds
+to the specified fontsize, when drawing the text.
+
+
+\section{More Possibilities}
+
+There are still a lot of things not covered in the given examples. Two of these
+I want to cover here, as they can be handy at times.
+
+\subsection{Drawing Geometry}
+
+While there are a lot of predefined plot types, it can occur that one wants to
+draw something very specifically, not covered with these. For this \mpl allows
+to draw a set of geometric objects like Rectangles, Circles or Polygones.
+
+
+\subsection{Styles}
+
+When having a certain plotting style in mind setting all the neccessary
+parameters can be repetitive and tedious. The \mpl offers a set of predefined
+\href{https://matplotlib.org/users/style\_sheets.html}{styles sheets} that can
+be used either by calling \pl{plt.style.use()}, or via context managers that
+are obtained by calling \pl{plt.style.context()}, both times with the name of
+the style as argument. This will set all parameters defined in the style to the
+specified values. When using context managers, the plotting commands outside of
+the context will still use the default values.  Parameters that are still set
+by hand will override those set in the style sheet.
+
+It is also possible to define custom style sheets. For this one simply has to
+define a style file with all values that are supposed to be changed. Possible
+values that can be set here are those, that can also be found in the 
+\pl{matplotlibrc}, the file containing all default parameters.
+
+To use it one can either supply the url of the file to the \pl{use()} or
+pl{context()} at \pl{$\sim$/.config/matplotlib/mpl\_configdir/stylelib} with a
+name of the form \pl{'<name>.mplstyle'} and then simply pass the name to the
+corresponding functions.
+
+
+\section{Other libraries}
+
+\onecolumn
+
+\section{Code for figure \ref{fig:gs}}
+\label{sec:gs}
+
+% \vspace{-9cm}
+\inputminted[linenos, mathescape]{python}{grid_spec.py}
+
+\end{document}

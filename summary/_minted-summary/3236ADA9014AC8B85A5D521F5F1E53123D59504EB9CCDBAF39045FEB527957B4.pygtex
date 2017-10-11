@@ -1,0 +1,59 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.gridspec} \PYG{k+kn}{as} \PYG{n+nn}{GS}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib} \PYG{k+kn}{as} \PYG{n+nn}{mpl}
+
+\PYG{n}{latex\PYGZus{}preamble} \PYG{o}{=} \PYG{p}{\PYGZob{}}
+    \PYG{l+s+s2}{\PYGZdq{}font.family\PYGZdq{}}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}serif\PYGZdq{}}\PYG{p}{,}        \PYG{c+c1}{\PYGZsh{} use serif/main font for text elements}
+    \PYG{l+s+s2}{\PYGZdq{}text.usetex\PYGZdq{}}\PYG{p}{:} \PYG{n+nb+bp}{True}\PYG{p}{,}           \PYG{c+c1}{\PYGZsh{} use inline math for ticks}
+    \PYG{l+s+s2}{\PYGZdq{}text.latex.preamble\PYGZdq{}}\PYG{p}{:} \PYG{p}{[}
+        \PYG{l+s+sa}{r}\PYG{l+s+s2}{\PYGZdq{}\PYGZbs{}usepackage\PYGZob{}amsmath\PYGZcb{}\PYGZdq{}}\PYG{p}{,}   \PYG{c+c1}{\PYGZsh{} for the align environment}
+        \PYG{p}{]}
+    \PYG{p}{\PYGZcb{}}
+
+\PYG{n}{mpl}\PYG{o}{.}\PYG{n}{rcParams}\PYG{o}{.}\PYG{n}{update}\PYG{p}{(}\PYG{n}{latex\PYGZus{}preamble}\PYG{p}{)}
+
+\PYG{n}{a}\PYG{p}{,} \PYG{n}{o} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{10}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}
+\PYG{n}{X} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,} \PYG{n}{o}\PYG{p}{,} \PYG{n}{num}\PYG{o}{=}\PYG{l+m+mi}{300}\PYG{p}{)}
+\PYG{n}{Y} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{X}\PYG{o}{/}\PYG{l+m+mi}{10}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+\PYG{n}{Z} \PYG{o}{=} \PYG{l+m+mi}{10} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{X}\PYG{o}{/}\PYG{l+m+mi}{10}\PYG{p}{)} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)}
+
+\PYG{n}{f} \PYG{o}{=} \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{(}\PYG{n}{figsize}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{l+m+mi}{4}\PYG{p}{))}
+
+\PYG{n}{gs} \PYG{o}{=} \PYG{n}{GS}\PYG{o}{.}\PYG{n}{GridSpec}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{,}
+                 \PYG{n}{width\PYGZus{}ratios}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{])}  \PYG{c+c1}{\PYGZsh{} left ax half as wide as right ax $\label{gswr}$}
+\PYG{n}{ax1} \PYG{o}{=} \PYG{n}{f}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n}{ax2} \PYG{o}{=} \PYG{n}{f}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n}{ax3} \PYG{o}{=} \PYG{n}{f}\PYG{o}{.}\PYG{n}{add\PYGZus{}subplot}\PYG{p}{(}\PYG{n}{gs}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,:])}  \PYG{c+c1}{\PYGZsh{} axes spanning the whole row $\label{gsslice}$}
+
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{Y}\PYG{p}{,} \PYG{n}{ec}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}X\PYGZsq{}}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} Plot a translucent Histogram $\label{hist}$}
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{hist}\PYG{p}{(}\PYG{n}{Z}\PYG{p}{,} \PYG{n}{ec}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}k\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.5}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Y\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}  \PYG{c+c1}{\PYGZsh{} Make a legend using the labels supplied above $\label{leg}$}
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Value\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Counts\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{ax2}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{Y}\PYG{p}{,} \PYG{n}{Z}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} Make a line plot $\label{plot}$}
+\PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}aspect}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Y\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{ax2}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Z\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{Y}\PYG{p}{)}
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{n}{Z}\PYG{p}{)}
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{annotate}\PYG{p}{(}\PYG{l+s+sa}{r}\PYG{l+s+s1}{\PYGZsq{}\PYGZdl{}10 + e\PYGZca{}\PYGZob{}\PYGZhy{}\PYGZbs{}frac\PYGZob{}x\PYGZcb{}\PYGZob{}10\PYGZcb{}\PYGZcb{} \PYGZbs{}cdot \PYGZbs{}cos\PYGZob{}x\PYGZcb{}\PYGZdl{}\PYGZsq{}}\PYG{p}{,}
+             \PYG{n}{xy}\PYG{o}{=}\PYG{p}{[}\PYG{n}{X}\PYG{p}{[}\PYG{l+m+mi}{100}\PYG{p}{],} \PYG{n}{Z}\PYG{p}{[}\PYG{l+m+mi}{100}\PYG{p}{]],} \PYG{n}{xytext}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mf}{0.9}\PYG{p}{,} \PYG{l+m+mf}{0.9}\PYG{p}{],}
+             \PYG{n}{arrowprops}\PYG{o}{=}\PYG{n+nb}{dict}\PYG{p}{(}\PYG{n}{arrowstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZgt{}\PYGZsq{}}\PYG{p}{,}
+                             \PYG{n}{connectionstyle}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}arc3,rad=0.2\PYGZsq{}}\PYG{p}{),}
+             \PYG{n}{textcoords}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}axes fraction\PYGZsq{}}\PYG{p}{,}
+             \PYG{n}{va}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}top\PYGZsq{}}\PYG{p}{,} \PYG{n}{ha}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}right\PYGZsq{}}\PYG{p}{,}
+             \PYG{n}{fontsize}\PYG{o}{=}\PYG{l+m+mi}{12}\PYG{p}{)}
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{set\PYGZus{}xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}X\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{set\PYGZus{}ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Y, Z\PYGZsq{}}\PYG{p}{)}
+
+\PYG{n}{ax1}\PYG{o}{.}\PYG{n}{yaxis}\PYG{o}{.}\PYG{n}{set\PYGZus{}label\PYGZus{}coords}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{)}
+\PYG{n}{ax3}\PYG{o}{.}\PYG{n}{yaxis}\PYG{o}{.}\PYG{n}{set\PYGZus{}label\PYGZus{}coords}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.1}\PYG{p}{,} \PYG{l+m+mf}{0.5}\PYG{p}{)}
+
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{tight\PYGZus{}layout}\PYG{p}{()}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{n+nv+vm}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}py\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}pgf\PYGZsq{}}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}
