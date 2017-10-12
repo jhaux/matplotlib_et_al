@@ -1,13 +1,19 @@
-\documentclass[a4paper, 11pt, twocolumn]{article}
+\documentclass[a4paper, 11pt, onecolumn]{article}
 
 % PACKAGES
 
 \usepackage{float}
 \usepackage[english]{babel}
+\usepackage[singlespacing]{setspace} % 1,5 Zeilenabstand: onehalfspacing
 \usepackage{pgfplots}  % Nice plots
-\usepackage[colorlinks=true]{hyperref}
 \usepackage{minted}  % Code highlighting
 \usepackage{xspace}  % Add trailing space if neccesary
+\usepackage{todonotes}
+\usepackage[colorlinks=true,
+            allcolors=orange,
+            breaklinks]{hyperref}
+
+% \setlength{\marginparwidth}{2cm}
 
 % COMMANDS
 
@@ -39,6 +45,14 @@
 \newcommand{\pl}[1]{\mbox{\texttt{#1}\xspace}}
 \newcommand{\latex}{\LaTeX\xspace}
 
+\newcommand{\fref}[2]{\href{#1}{#2}\footnote{\url{#1}}}
+% reference helpers
+\newcommand{\baseref}[3]{\mbox{#1 \ref{#2:#3}\xspace}}
+\newcommand{\fig}[1]{\baseref{figure}{fig}{#1}}
+\renewcommand{\sec}[1]{\baseref{section}{sec}{#1}}
+\newcommand{\lis}[1]{\baseref{listing}{l}{#1}}
+\newcommand{\lin}[1]{\baseref{line}{li}{#1}}
+
 \title{matplotlib et al.}
 \author{Johannes Haux}
 \date{\today}
@@ -48,8 +62,41 @@
 
 \maketitle
 
-% \plotsample[8cm]{-1cm}{0.5}{axis_labels}{Adding labels to the axis is done with
-%                                         two lines of code.}{lb}
+
+Presenting data has always been a very important topic in research. 
+While quantitative analyses can give precise information about data it is
+often far easier to convey information using graphical representations 
+\cite{plotsarecool}.
+
+Today a large number of tools exist to generate plots from data.  Commercial
+solutions like \pl{Mathematica} \cite{mate}, \pl{Matlab} \cite{matl} or
+\pl{Origin} \cite{orig} encorporate data analysis software together with
+plotting tools, allowing to have a complete pipeline from reading and analysing
+the data to generating a finished plot.
+
+Free and open source libraries that offer similar functionality are \pl{d3.js}
+\cite{d3js}, which is the base for \pl{plotly.js} \cite{plotly}, or \mpl
+\cite{mpl}, which in turn is used as backend in \pl{bokeh} \cite{bokeh} and
+\pl{seaborn}, \cite{seaborn}.
+
+\pl{d3.js} is a very low level \pl{javascript} library which offers very
+finegrained possibilities to generate interactive data visualizations.
+
+\pl{plotly.js}, which is built on top of it offers only a subset of plot types,
+but with more convenince functions, making it easier to generate plots. 
+Plotly can be used as javascript library, but also bindings for \pl{python}, 
+\pl{MATLAB} or \pl{R} exist.
+
+The \mpl is a python library, originaly written by John Hunter to make 
+visualizations of the brain \cite{john}. It later became the most widely used
+python plotting library.
+
+Built on top of it are \pl{bokeh} and \pl{seaborn}, which offer higher level
+abstractions and a set of predefined styles. Additionally \pl{bokeh} also
+makes plots interactive, that can be integrated in web pages.
+
+
+\section{This paper}
 
 When it comes to presenting data, \mpl is a very interesting
 tool, that combines a lot of positive features:
@@ -62,24 +109,29 @@ This document accompanies a talk given in the seminar "Advanced Tools" during
 the summer semester 2017. Here I will take a look at some basic concepts of
 \mpl and then demonstrate some features using an example plot.
 
+For more interactive examples I recommend to take a look the jupyter notebooks
+from the talk, which can be found on
+\fref{https://github.com/jhaux/matplotlib\_et\_al}{github}. 
 
-\section{A first Plot}
+\section{A quick Plot}
 
 \begin{figure}[h!]
 \centering
 \input{axis_labels.pgf}
-\caption{Plot generated with the code shown in listing \ref{l:al}}
+\caption{Plot generated with the code shown in \lis{al}}
 \label{fig:al}
 \end{figure}
 
 \begin{listing}[h!]
 \inputminted{python}{axis_labels.py}
-\caption{Code for figure \ref{fig:al}.}
+\caption{Code for \fig{al}.}
 \label{l:al}
 \end{listing}
 
-To show how quickly one can make plots with the \mpl an example
-is given in \mbox{figure \ref{fig:al}}.
+To start of we take a look at how easy it is to quickly generate plots with
+the \mpl.
+In \fig{al} you can find a plot made with the script shown
+in \lis{al}.
 
 Given an artificially created dataset \pl{data} we want to take a look at its
 histogram.
@@ -94,11 +146,13 @@ to the user with the \pl{plt.show()} command.
 To ensure that the axis labels are visible when the plot is saved the method
 \pl{f.tight\_layout()} is called on the figure object containing the plot.
 
-Thus it is very easy to get a visual feedback of how your data looks like with
-only a small number of lines of code! But of course when thinking about publishing, one wants to have more intricate customizability. This is absolutely 
-possible using the \mpl, as can be seen for example in figure \ref{fig:gs}.
-To understand what is happening there, we will first take a look at what is 
-inside the plots generated with the \mpl.
+This shows just how easy it is to get a visual feedback of how your data looks
+like with only a small number of lines of code! 
+
+But when thinking about publishing, one wants to have more intricate
+customizability. This is absolutely possible using the \mpl, as can be seen for
+example in \fig{gs}.  To understand what is happening there, we will
+first take a look at what is inside the plots generated with the \mpl.
 
 
 \section{Components of a Plot}
@@ -134,21 +188,21 @@ to draw the plot. As said above, these can be accessed by calling
 
 \section{Working with \mpl}
 
-At times the many possibilities the \mpl offers can be overwhelming. There are 
-nevertheless ways to help yourself.
+Before taking a look at a more complex example, let us first have a look at
+ways of helping yourself if the many possibilities the \mpl offers become overwhelming. 
 
 \begin{description}
 \item[Examples]
 If one is unsure what kind of plot one wants to make or has a rough idea, what
-it should look like, the \href{https://matplotlib.org/examples/}{examples} page
+it should look like, the \fref{https://matplotlib.org/examples/}{examples} page
 of the matplotlib documentation is very helpful.
 \item[Documentation]
 When in doubt how to use a certain object or method, the
-\mpl \href{https://matplotlib.org/contents.html}{documentation} covers it! 
+\mpl \fref{https://matplotlib.org/contents.html}{documentation} covers it! 
 \item[StackOverflow]
 If the above two ways do not help, it might be useful to note, that there is a
 very active user community, helping each other out, e.g. on
-\href{https://stackoverflow.com/questions/tagged/matplotlib}{stackoverflow}.
+\fref{https://stackoverflow.com/questions/tagged/matplotlib}{stackoverflow}.
 Most solutions to most problems can be found there.
 \end{description}
 
@@ -158,37 +212,42 @@ Most solutions to most problems can be found there.
 
 \label{sec:plt}
 
-\begin{figure*}[ht!]
+\begin{figure}[ht!]
 \centering
 \input{grid_spec.pgf}
 \caption{Complex plot example showing different plot types and ways to
-         structure the appearance. It is discussed in detail in section
-         \ref{sec:plt}.}
+         structure the appearance. It is discussed in detail in \sec{plt}.}
 \label{fig:gs}
-\end{figure*}
+\end{figure}
+
+With the knowlege of the \mpl components and how to find documentation, let us
+take a look at a more complex plot example.
+
 
 In the following, whenever line numbers are referenced, these are taken from
-section \ref{sec:gs}, unless otherwise specified.
+\sec{gs}, unless otherwise specified.
 
-In figure \ref{fig:gs} one can find the plot that is generated by the code
-found in section \ref{sec:gs}. Again artificially generated data is used.
+In \fig{gs} one can find the plot that is generated by the code
+found in \sec{gs}. Again artificially generated data is used.
 
-When comparing the code shown in listing \ref{l:al} and section \ref{sec:gs}
+When comparing the code shown in \lis{al} and \sec{gs}
 respectively, one can first of all notice several differences in how the plots
 are created.
 
 \subsection{Coding Style}
-The code shown in figure \ref{fig:al} is written in the "pyplot" coding style,
+The code shown in \fig{al} is written in the "pyplot" coding style,
 also called "MATLAB" coding style, as it tries to emulate the plotting commands
 used in MATLAB.
 
 This coding style can be used to quickly create simple plots, yet it can
-grow unreadbly very fast if the plot becomes more and more complex.
+grow unreadbly very fast as the plot becomes more and more complex.
 
 The alternative to this coding style is the object oriented approach, which 
 uses explicit handles for figures and axes objects. It has the great advantage,
 that it make s code easier to read and allows access to more methods, that 
 would be harder to use when using pure pyplot coding.
+
+In \lin{fig} 
 
 
 \subsection{Multiple Axes}
@@ -207,25 +266,25 @@ To get more control over the way the axes are drawn one can use the
 \pl{GridSpec} object as is done in the example plot. It also defines a grid,
 but in contrast to the approach above one can also define axes that span
 several rows or columns or both, by passing slices of the object to
-\pl{figure.add\_subplot()}. This is done for example in line \ref{gsslice}.
+\pl{figure.add\_subplot()}. This is done for example in \lin{gsslice}.
 Additionaly one can also specify the height or width ratios of the axes using
 the \pl{height\_ratios} or \pl{width\_ratios} keyword argument. The latter can
-be seen in line \ref{gswr}. Of course the customizability does not end here,
+be seen in \lin{gswr}. Of course the customizability does not end here,
 more information on the
-\href{https://matplotlib.org/users/gridspec.html}{GridSpec} object can be found
+\fref{https://matplotlib.org/users/gridspec.html}{GridSpec} object can be found
 in the matplotlib documentation.
 
 
 \subsection{Plot types}
 
-We can also see a new plottype in figure \ref{fig:gs}: The lineplot, generated
-with the \pl{ax.plot()} method (see line \ref{plot}).
+We can also see a new plottype in \fig{gs}: The lineplot, generated
+with the \pl{ax.plot()} method (see \lin{plot}).
 
 There are very many different plot types \mpl supports, a look at the
-\href{https://matplotlib.org/api/axes_api.html#plotting}{documentation} can
+\fref{https://matplotlib.org/api/axes\_api.html\#plotting}{documentation} can
 give an idea of how these look like.
 
-Also note that when plotting the histogram in line \ref{hist} and below, some
+Also note that when plotting the histogram in \lin{hist} and below, some
 keyword arguments are passed to draw a black edge around the bars and make them
 translucent, such that the overlapping parts are all visible. Most plotting
 methods support these and similar arguments, like \pl{linestyle}, \pl{color},
@@ -233,7 +292,7 @@ methods support these and similar arguments, like \pl{linestyle}, \pl{color},
 plots are drawn.
 
 Calling several plotting methods on one axis in succession without specifing the color explicitly will not result in multiple plots of the same color, but as
-can be seen in figure \ref{fig:gs}, in plots of different colors. This allows
+can be seen in \fig{gs}, in plots of different colors. This allows
 to easily stack plots in one axes without loosing the overview.
 
 \subsection{Legends}
@@ -242,7 +301,7 @@ To know which plot corresponds to which data one can pass the \pl{label}
 keyword to each plotting method and call the \pl{ax.legend()} method on the
 axes of interest. The draws a legend with the specified labels in a place on
 the axes that covers as little of the plot as possible. This can be seen in
-line \ref{leg}. The position of the legend can also be explicitly set by 
+\lin{leg}. The position of the legend can also be explicitly set by 
 passing a string (e.g. \pl{'upper left'}, \pl{'center'}) or an int (e.g.
 \pl{2}, \pl{10} respectively).
 
@@ -252,7 +311,7 @@ different axes than the one where the data is plotted, one has to pass a list
 of handles and a list of corresponding names to this method. The handles are
 returned by the plotting methods.
 
-Again a look at the \href{https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.legend.html#matplotlib.axes.Axes.legend}{documentation}
+Again a look at the \fref{https://matplotlib.org/api/\_as\_gen/matplotlib.axes.Axes.legend.html\#matplotlib.axes.Axes.legend}{documentation}
 can be very helpful.
 
 
@@ -267,11 +326,10 @@ choose the \pl{'font.family'} accordingly. All text will now look like in a
 \latex document.
 
 But this is not all we can do: If one would like to draw a \latex formula in
-the plot this is now possible. In the example this is done in line \ref{ann}
-using the \href{https://matplotlib.org/users/annotations.html}{\pl{annotate()}}
+the plot this is now possible. In the example this is done in \lin{ann}
+using the \fref{https://matplotlib.org/users/annotations.html}{\pl{annotate()}}
 method, but one could also use the
-\href{https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.text}
-{\pl{text()}} method.
+\fref{https://matplotlib.org/api/pyplot\_api.html\#matplotlib.pyplot.text}{\pl{text()}} method.
 
 Please note that the string containing the text is a raw string. Thus no 
 characters are escaped, which helps a lot when using expressions like
@@ -299,7 +357,7 @@ horizontal alignment respectively. In our example they are set such that the
 top right of the bounding box of the text is at the corrdinates specified for 
 the text.
 
-Another example where text is modified can be found in line \ref{lbc}.
+Another example where text is modified can be found in \lin{lbc}.
 Sometimes it can be useful to explicitely position the labels of an axis. In
 our example the y labels of the top left and bottom axes were not aligned, so
 they were modeved using the \pl{ax.yaxis.set\_label\_coords()} method. Its
@@ -307,7 +365,21 @@ arguments are the x and y coordinates of the label as axes fraction at which
 the text should be placed, just like above in the \pl{annotate} example.
 
 
+\subsection{Spans}
+
+Sometimes it can be neccesseary to draw geometry spanning the whole plot.
+In \lin{hline} of the example a dashed horizontal line is drawn and in
+\lin{vspan} we can find an example of how to draw an area inside the plot.
+
+The coordinates that are input to these methods are expected to be in data
+space, making these methods very useful when pointing out special
+characteristics of the data. In the case of the example it is the mean of
+the \pl{Y} dataset and the difference in \pl{X} of one periode of the \pl{Z}
+dataset.
+
+
 \subsection{Exporting}
+
 When we are done with tweaking the plot it is time to save it to a file, that
 can later be reused. This is simply done by calling the \pl{f.save()} method 
 on the figure object. The only thing that needs to be specified is name of the
@@ -328,21 +400,14 @@ to the specified fontsize, when drawing the text.
 
 \section{More Possibilities}
 
-There are still a lot of things not covered in the given examples. Two of these
-I want to cover here, as they can be handy at times.
-
-\subsection{Drawing Geometry}
-
-While there are a lot of predefined plot types, it can occur that one wants to
-draw something very specifically, not covered with these. For this \mpl allows
-to draw a set of geometric objects like Rectangles, Circles or Polygones.
-
+There are still a lot of things not covered in the given examples. One of these
+I want to cover here, as it can be handy when making plots on a regular basis.
 
 \subsection{Styles}
 
 When having a certain plotting style in mind setting all the neccessary
 parameters can be repetitive and tedious. The \mpl offers a set of predefined
-\href{https://matplotlib.org/users/style\_sheets.html}{styles sheets} that can
+\fref{https://matplotlib.org/users/style\_sheets.html}{styles sheets} that can
 be used either by calling \pl{plt.style.use()}, or via context managers that
 are obtained by calling \pl{plt.style.context()}, both times with the name of
 the style as argument. This will set all parameters defined in the style to the
@@ -361,14 +426,21 @@ name of the form \pl{'<name>.mplstyle'} and then simply pass the name to the
 corresponding functions.
 
 
-\section{Other libraries}
+\section{Conclusion}
 
-\onecolumn
+Even though a lot of things have not been covered here one can hopefully see
+that the \mpl is a powerful tool for data visualization. It can easily be used
+to get a quick glimpse of the data of interest, but also to make very detailed
+plots that are publication ready.
 
-\section{Code for figure \ref{fig:gs}}
+
+\section{Code for \fig{gs}}
 \label{sec:gs}
 
-% \vspace{-9cm}
 \inputminted[linenos, mathescape]{python}{grid_spec.py}
+
+\bibliography{bib}{}
+\bibliographystyle{plain}
+
 
 \end{document}
