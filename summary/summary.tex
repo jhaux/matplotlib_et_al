@@ -64,14 +64,15 @@
 
 
 Presenting data has always been a very important topic in research. 
-While quantitative analyses can give precise information about data it is
-often far easier to convey information using graphical representations 
+While quantitative analyses can give precise information about data many
+use cases exist, where it is far easier to convey information using graphical
+representations 
 \cite{plotsarecool}.
 
 Today a large number of tools exist to generate plots from data.  Commercial
-solutions like \pl{Mathematica} \cite{mate}, \pl{Matlab} \cite{matl} or
-\pl{Origin} \cite{orig} encorporate data analysis software together with
-plotting tools, allowing to have a complete pipeline from reading and analysing
+solutions like \pl{Mathematica} \cite{mate}, \pl{MATLAB} \cite{matl} or
+\pl{Origin} \cite{orig} incorporate data analysis software together with
+plotting tools, allowing to have a complete pipeline from reading and analyzing
 the data to generating a finished plot.
 
 Free and open source libraries that offer similar functionality are \pl{d3.js}
@@ -79,15 +80,15 @@ Free and open source libraries that offer similar functionality are \pl{d3.js}
 \cite{mpl}, which in turn is used as backend in \pl{bokeh} \cite{bokeh} and
 \pl{seaborn}, \cite{seaborn}.
 
-\pl{d3.js} is a very low level \pl{javascript} library which offers very
-finegrained possibilities to generate interactive data visualizations.
+\pl{d3.js} is a very low level \pl{JavaScript} library which offers very
+fine grained possibilities to generate interactive data visualizations.
 
 \pl{plotly.js}, which is built on top of it offers only a subset of plot types,
-but with more convenince functions, making it easier to generate plots. 
-Plotly can be used as javascript library, but also bindings for \pl{python}, 
+but with more convenience functions, making it easier to generate plots. 
+Plotly can be used as JavaScript library, but also bindings for \pl{python}, 
 \pl{MATLAB} or \pl{R} exist.
 
-The \mpl is a python library, originaly written by John Hunter to make 
+The \mpl is a python library, originally written by John Hunter to make 
 visualizations of the brain \cite{john}. It later became the most widely used
 python plotting library.
 
@@ -161,19 +162,19 @@ A \mpl plot consists of 4 main components:
 \begin{description}
 \item[Figure]
 The figure manages all axes in a plot and contains information on the size of
-the plot. It can be instanciated by calling \pl{plt.figure()}. 
-The current figure can be obained by calling \pl{plt.gcf()}.
+the plot. It can be instantiated by calling \pl{plt.figure()}. 
+The current figure can be obtained by calling \pl{plt.gcf()}.
 
 \item[Axes]
 The axes is where the actual plot lives. Here the data is drawn
-as specified in the plot calls. To instanciate an axes given a figure \pl{f}
+as specified in the plot calls. To instantiate an axes given a figure \pl{f}
 one can use \pl{f.add\_subplot(...)}. To generate both figure and axes it
 is encouraged to use \pl{f, ax = plt.subplots(rows, cols)}.
-The current axes can be obained by calling \pl{plt.gca()}.
+The current axes can be obtained by calling \pl{plt.gca()}.
 
 \item[Axis]
 Each axes contains a set of axis, which manage the data range that is to be
-plotted as well as all ticks and ticklabels.
+plotted as well as all ticks and tick labels.
 
 \item[Artist]
 All components of a plot are drawn by artists when the plot is rendered.
@@ -195,7 +196,7 @@ ways of helping yourself if the many possibilities the \mpl offers become overwh
 \item[Examples]
 If one is unsure what kind of plot one wants to make or has a rough idea, what
 it should look like, the \fref{https://matplotlib.org/examples/}{examples} page
-of the matplotlib documentation is very helpful.
+of the \mpl documentation is very helpful.
 \item[Documentation]
 When in doubt how to use a certain object or method, the
 \mpl \fref{https://matplotlib.org/contents.html}{documentation} covers it! 
@@ -220,7 +221,7 @@ Most solutions to most problems can be found there.
 \label{fig:gs}
 \end{figure}
 
-With the knowlege of the \mpl components and how to find documentation, let us
+With the knowledge of the \mpl components and how to find documentation, let us
 take a look at a more complex plot example.
 
 
@@ -240,7 +241,7 @@ also called "MATLAB" coding style, as it tries to emulate the plotting commands
 used in MATLAB.
 
 This coding style can be used to quickly create simple plots, yet it can
-grow unreadbly very fast as the plot becomes more and more complex.
+grow unreadable very fast as the plot becomes more and more complex.
 
 The alternative to this coding style is the object oriented approach, which 
 uses explicit handles for figures and axes objects. It has the great advantage,
@@ -267,17 +268,17 @@ To get more control over the way the axes are drawn one can use the
 but in contrast to the approach above one can also define axes that span
 several rows or columns or both, by passing slices of the object to
 \pl{figure.add\_subplot()}. This is done for example in \lin{gsslice}.
-Additionaly one can also specify the height or width ratios of the axes using
+Additionally one can also specify the height or width ratios of the axes using
 the \pl{height\_ratios} or \pl{width\_ratios} keyword argument. The latter can
 be seen in \lin{gswr}. Of course the customizability does not end here,
 more information on the
 \fref{https://matplotlib.org/users/gridspec.html}{GridSpec} object can be found
-in the matplotlib documentation.
+in the \mpl documentation.
 
 
 \subsection{Plot types}
 
-We can also see a new plottype in \fig{gs}: The lineplot, generated
+We can also see a new plot type in \fig{gs}: The line plot, generated
 with the \pl{ax.plot()} method (see \lin{plot}).
 
 There are very many different plot types \mpl supports, a look at the
@@ -291,9 +292,10 @@ methods support these and similar arguments, like \pl{linestyle}, \pl{color},
 \pl{marker} or \pl{markersize}, which allow to explicitly specify the way the
 plots are drawn.
 
-Calling several plotting methods on one axis in succession without specifing the color explicitly will not result in multiple plots of the same color, but as
-can be seen in \fig{gs}, in plots of different colors. This allows
-to easily stack plots in one axes without loosing the overview.
+Calling several plotting methods on one axis in succession without specifying
+the color explicitly will not result in multiple plots of the same color, but
+as can be seen in \fig{gs}, in plots of different colors. This allows to easily
+stack plots in one axes without loosing the overview.
 
 \subsection{Legends}
 
@@ -305,7 +307,7 @@ the axes that covers as little of the plot as possible. This can be seen in
 passing a string (e.g. \pl{'upper left'}, \pl{'center'}) or an int (e.g.
 \pl{2}, \pl{10} respectively).
 
-Calling \pl{legend()} without argurments will only take labels from plotting
+Calling \pl{legend()} without arguments will only take labels from plotting
 calls on this axes into account. If one would like to make a legend inside a
 different axes than the one where the data is plotted, one has to pass a list
 of handles and a list of corresponding names to this method. The handles are
@@ -334,7 +336,7 @@ method, but one could also use the
 Please note that the string containing the text is a raw string. Thus no 
 characters are escaped, which helps a lot when using expressions like
 \pl{\\frac\{\}\{\}}, that would otherwise result in escaping \pl{\\f} to a
-formfeed or pagebreak, something latex does not understand.
+formfeed or page break, something latex does not understand.
 
 While \pl{text} simply draws the text where we want it, \pl{annotate} also
 allows to draw an arrow between text and a point \pl{xy}, we have to specify.
@@ -343,7 +345,7 @@ dictionary. Here we chose to draw an arc with a simple arrowhead on the front,
 but many other possibilities exist.
 
 The coordinates that are specified are also interesting to look at. When
-drawing text the default behaviour of \mpl is to interpret the coordinates like
+drawing text the default behavior of \mpl is to interpret the coordinates like
 data points. In our example this is the case for the \pl{xy} coordinates where
 the arrow points. As the text is supposed to be place in the top left corner,
 the coordinates \pl{xytext} here are chosen to be a fraction of the axes as
@@ -354,27 +356,27 @@ $[0, 1]^2$ are outside of the axes.
 To ensure that the text is not drawn over the borders of the plot we can
 specify its alignment with the \pl{va} and \pl{ha} keywords for vertical and
 horizontal alignment respectively. In our example they are set such that the 
-top right of the bounding box of the text is at the corrdinates specified for 
+top right of the bounding box of the text is at the coordinates specified for 
 the text.
 
 Another example where text is modified can be found in \lin{lbc}.
-Sometimes it can be useful to explicitely position the labels of an axis. In
+Sometimes it can be useful to explicitly position the labels of an axis. In
 our example the y labels of the top left and bottom axes were not aligned, so
-they were modeved using the \pl{ax.yaxis.set\_label\_coords()} method. Its
+they were moved using the \pl{ax.yaxis.set\_label\_coords()} method. Its
 arguments are the x and y coordinates of the label as axes fraction at which
 the text should be placed, just like above in the \pl{annotate} example.
 
 
 \subsection{Spans}
 
-Sometimes it can be neccesseary to draw geometry spanning the whole plot.
+Sometimes it can be necessary to draw geometry spanning the whole plot.
 In \lin{hline} of the example a dashed horizontal line is drawn and in
 \lin{vspan} we can find an example of how to draw an area inside the plot.
 
 The coordinates that are input to these methods are expected to be in data
 space, making these methods very useful when pointing out special
 characteristics of the data. In the case of the example it is the mean of
-the \pl{Y} dataset and the difference in \pl{X} of one periode of the \pl{Z}
+the \pl{Y} dataset and the difference in \pl{X} of one period of the \pl{Z}
 dataset.
 
 
@@ -390,12 +392,12 @@ The latter is of special interest to \latex users, as it saves the plot as a
 tikz picture, that then can be placed inside a \latex document using the
 command \pl{\\input\{<plot>.pgf\}}
 
-The dimensions of the plot are those specified when instanciating the figure
+The dimensions of the plot are those specified when instantiating the figure
 using the \pl{figsize} argument. Please note that the unit of these values is
 inches. 
 
 It is also important to note, that the size of text in the plots corresponds
-to the specified fontsize, when drawing the text.
+to the specified font size, when drawing the text.
 
 
 \section{More Possibilities}
@@ -405,7 +407,7 @@ I want to cover here, as it can be handy when making plots on a regular basis.
 
 \subsection{Styles}
 
-When having a certain plotting style in mind setting all the neccessary
+When having a certain plotting style in mind setting all the necessary
 parameters can be repetitive and tedious. The \mpl offers a set of predefined
 \fref{https://matplotlib.org/users/style\_sheets.html}{styles sheets} that can
 be used either by calling \pl{plt.style.use()}, or via context managers that
